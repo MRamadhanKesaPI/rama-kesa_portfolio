@@ -832,5 +832,7 @@ SET week_end = DATE_TRUNC('WEEK', date) + INTERVAL '6 days',
 	month_name = TO_CHAR(date, 'MONTH'),
 	quarter = EXTRACT(QUARTER FROM date),
 	year = EXTRACT(YEAR FROM date);
+```
 
+#### 
 
