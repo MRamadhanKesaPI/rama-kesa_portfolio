@@ -1,6 +1,6 @@
 # Intregated Business Analytics
 
-## Analyzed sales, product, customer, and operational efficiency using Postgresql, Power BI, and Python
+## Analyzed sales, product, customer, and operational efficiency using PostgreSQL, Power BI, and Python
 
 ### Project Overview
 
