@@ -21,7 +21,6 @@ This project provides insights into sales performance, product performance, cust
 
 - PostgreSQL
   - Data Preparation
-  - Data Transformation
 - Power BI
   - EDA Process with DAX 
   - Data Visualization
@@ -33,6 +32,7 @@ This project provides insights into sales performance, product performance, cust
 1. Data Import and Inspection
 2. Data Cleaning
 3. Data Transformation
+4. Defining Relationships
 
 #### 1. Data Import and Inspection
 
@@ -44,7 +44,6 @@ In this phase, i import the data and check it for any issues. This includes:
 I found that the date column in several datasets had mixed formats, with some values not being actual dates. To fix this, I imported the date columns as **VARCHAR** (text) to keep all the values intact. Later, during the data cleaning & type conversion phase, I will convert them to proper date formats for consistency and analysis.
 
 Below are the SQL queries and results for each Iport and Inspection step.
-
 ```sql
 /* ================================================================================
    STEP 1: DATA IMPORT AND INSPECTION
@@ -679,7 +678,6 @@ This section focuses on transforming the data to make it enriched. Key steps inc
 - Creating New Columns: Adding and populating new columns to enrich the dataset with additional information.
 
 Below are the SQL queries and results for each transformation step.
-
 ```sql
 /* ================================================================================
    STEP 3: DATA TRANSFORMATION 
@@ -834,5 +832,69 @@ SET week_end = DATE_TRUNC('WEEK', date) + INTERVAL '6 days',
 	year = EXTRACT(YEAR FROM date);
 ```
 
-#### 
+#### 4. Defining Relationships
+
+In this phase, i define relationships between tables to ensure data integrity and proper connections. 
+
+Since the date values were imported as **VARCHAR** but were changed to actual **DATE** during data cleaning, the first step is to set the primary key (PK) for the date in the calendar table.
+
+Below are the SQL queries and results for each table relationships step.
+```sql
+/* ================================================================================
+   STEP 4: DEFINING RELATIONSHIPS 
+   ================================================================================ */
+
+
+/* --------------------------------------------------------------------------------
+   4.1 Set Primary Key Constraints for 'date' in the mavenmarket_calendar
+   -------------------------------------------------------------------------------- */
+   
+-- This ensures that each date in the calendar table is unique and serves as a 
+-- central point for linking other tables to time-related data
+ALTER TABLE mavenmarket_calendar
+ADD CONSTRAINT pk_date PRIMARY KEY (date);
+
+
+
+/* --------------------------------------------------------------------------------
+   4.2: Define Foreign Key Relationships in the mavenmarket_returns
+   -------------------------------------------------------------------------------- */
+
+-- Link the returns table to other tables for data integrity:
+-- 1. 'product_id' must match a record in the products table
+-- 2. 'store_id' must match a record in the stores table
+-- 3. 'return_date' must match a date in the calendar table
+ALTER TABLE mavenmarket_returns
+ADD CONSTRAINT fk_product_id FOREIGN KEY (product_id) REFERENCES mavenmarket_products (product_id),
+ADD CONSTRAINT fk_store_id FOREIGN KEY (store_id) REFERENCES mavenmarket_stores (store_id),
+ADD CONSTRAINT fk_return_date FOREIGN KEY (return_date) REFERENCES mavenmarket_calendar (date); 
+
+
+
+/* --------------------------------------------------------------------------------
+   4.3: Define Foreign Key Relationships in the mavenmarket_orders
+   -------------------------------------------------------------------------------- */
+
+-- Link the orders table to other tables for data integrity:
+-- 1. 'customer_id' must match a record in the customers table
+-- 2. 'product_id' must match a record in the products table
+-- 3. 'store_id' must match a record in the stores table
+-- 4. 'transaction_date' must match a date in the calendar table
+ALTER TABLE mavenmarket_orders
+ADD CONSTRAINT fk_customer_id FOREIGN KEY (customer_id) REFERENCES mavenmarket_customers (customer_id),
+ADD CONSTRAINT fk_product_id FOREIGN KEY (product_id) REFERENCES mavenmarket_products (product_id),
+ADD CONSTRAINT fk_store_id FOREIGN KEY (store_id) REFERENCES mavenmarket_stores (store_id),
+ADD CONSTRAINT fk_transaction_date FOREIGN KEY(transaction_date) REFERENCES mavenmarket_calendar (date);
+
+
+
+/* --------------------------------------------------------------------------------
+   4.4: Define Foreign Key Relationships to Link Stores and Regions
+   -------------------------------------------------------------------------------- */
+
+-- Link the stores table to the regions table:
+-- 'region_id' must match a record in the regions table to assign a store to a region
+ALTER TABLE mavenmarket_stores
+ADD CONSTRAINT fk_region_id FOREIGN KEY (region_id) REFERENCES mavenmarket_regions (region_id);
+```
 
