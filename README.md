@@ -2,9 +2,11 @@
 
 ## Analyzed sales, product, customer, and operational efficiency using PostgreSQL, Power BI, and Python
 
+
 ### Project Overview
 
 This project provides insights into sales performance, product performance, customer behavior, and operational efficiency for a retail business. It analyzes key metrics such as revenue, profit, product-level trends, customer retention, and store performance. The project uncovers actionable insights, evaluates business strategies, and identifies opportunities to improve profitability, product optimization, customer satisfaction, and operational efficiency.
+
 
 ### Data Sources
 
@@ -17,6 +19,7 @@ This project provides insights into sales performance, product performance, cust
 7. Orders 1997 Data: Includes orders details for 1997, such as order date, stock date, quantities, and it links to Customers, Products, and Stores Data through thei IDs.
 8. Orders 1998 Data: Includes orders details for 1998, structured the same way as Orders 1997.
 
+
 ### Tools
 
 - PostgreSQL
@@ -27,12 +30,14 @@ This project provides insights into sales performance, product performance, cust
 - Python
   - Find the Correlation
 
-### Data Preparation Process
+
+### Data Preparation Process 
 
 1. Data Import and Inspection
 2. Data Cleaning
 3. Data Transformation
 4. Defining Relationships
+
 
 #### 1. Data Import and Inspection
 
@@ -206,6 +211,7 @@ CREATE TABLE mavenmarket_orders_1998(
 -- Import data from csv files into mavenmarket_orders_1998 table
 COPY mavenmarket_orders_1998 FROM 'D:\Downloads\MAVEN\Maven\MavenMarket_Orders_1998.csv' delimiter ',' csv header;
 ```
+
 
 #### 2. Data Cleaning
 
@@ -669,6 +675,7 @@ FROM mavenmarket_orders_1998;
 -- No duplicate check needed for mavenmarket_orders_1998 as it is a foreign key (FK) table
 ```
 
+
 #### 3. Data Transformation
 
 This section focuses on transforming the data to make it enriched. Key steps include:
@@ -832,6 +839,7 @@ SET week_end = DATE_TRUNC('WEEK', date) + INTERVAL '6 days',
 	year = EXTRACT(YEAR FROM date);
 ```
 
+
 #### 4. Defining Relationships
 
 In this phase, i define relationships between tables to ensure data integrity and proper connections. 
@@ -897,4 +905,87 @@ ADD CONSTRAINT fk_transaction_date FOREIGN KEY(transaction_date) REFERENCES mave
 ALTER TABLE mavenmarket_stores
 ADD CONSTRAINT fk_region_id FOREIGN KEY (region_id) REFERENCES mavenmarket_regions (region_id);
 ```
+
+
+### Exploratory Data Analysis
+
+Exploratory Data Analysis (EDA) is the first step in Power BI, where I dive deep into the data to uncover key patterns using DAX measures.
+
+I start by connecting the cleaned and transformed PostgreSQL data to Power BI. Next, I verify that all date columns are in the correct short date format and ensure that all monetary values are properly formatted as currency. Since the relationships between tables were already defined in PostgreSQL, Power BI automatically establishes the connections.
+
+Following this, I focus on the key questions that guide the analysis. These questions are derived from the foundational DAX measures and will help in gaining valuable insights from the data. The questions explore various aspects of the business such as overall sales performance, product details, customer behavior, and operational efficiency. Here are the key questions for each area:
+
+1. Foundational Calculations in DAX
+2. Sales Topline Performance (DAX + Visual Report)
+3. Product Detail (DAX + Visual Report)
+4. Customer Detail (DAX + Visual Report)
+5. Operational Efficiency (DAX + Visual Report)
+
+   
+#### 1. Foundational Calculations in DAX
+- How do key metrics like total orders, total sold, and total returns vary across different dimensions?
+- What do total revenue and cost metrics reveal about profitability?
+- How does total profit correlate with other performance metrics?
+
+Below are the DAX measures.
+```DAX
+Total Orders = COUNT(Orders[quantity])
+
+Total Sold = SUM(Orders[quantity])
+
+Total Returns = SUM(Returns[quantity])
+ 
+Total Revenue = SUMX(Orders,Orders[quantity] * RELATED(Products[product_retail_price]))
+
+Total Cost = SUMX(Orders,Orders[quantity] * RELATED(Products[product_cost]))
+
+Total Profit = [Total Revenue] - [Total Cost]
+```
+
+#### 2. Sales Topline Performance (DAX + Visual Report)
+- What is the overall sales trend?
+- What is the revenue trend over time?
+- Which country generates the most revenue?
+- Which product brand has the highest revenue?
+- What is the profit margin for the top-selling products?
+- What is the YTD revenue growth compared to the previous year?
+
+Below are the DAX measures.
+```DAX
+Profit Margin = DIVIDE([Total Profit],[Total Revenue],0)
+
+Return Rate (%) = DIVIDE([Total Returns], [Total Sold], 0)
+
+YTD Revenue = TOTALYTD([Total Revenue], 'Calendar'[date])
+
+Previous Year YTD Revenue = CALCULATE([Total Revenue], DATEADD('Calendar'[date], -1, YEAR))
+```
+
+Below are the visual report for sales topline performance.
+
+![image](https://github.com/user-attachments/assets/5006044a-8f60-4450-b17b-57d548f98729)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
