@@ -947,8 +947,7 @@ Total Profit = [Total Revenue] - [Total Cost]
 - What is the revenue trend over time?
 - Which country generates the most revenue?
 - Which product brand has the highest revenue?
-- What is the profit margin for the top-selling products?
-- What is the YTD revenue growth compared to the previous year?
+- Which product brand has the highest profit margin?
 
 Below are the DAX measures.
 ```DAX
@@ -963,12 +962,39 @@ Previous Year YTD Revenue = CALCULATE([Total Revenue], DATEADD('Calendar'[date],
 
 Below are the visual report for sales topline performance.
 
-![image](https://github.com/user-attachments/assets/5006044a-8f60-4450-b17b-57d548f98729)
+![image](https://github.com/user-attachments/assets/f29204cd-9bf7-4133-b8c8-add225b21b59)
 
 
+##### Results:
+- Maven Market has achieved strong profitability with a $1.05M profit and a 59% profit margin, fueled by rapid growth in 1998 through expansions into Mexico and Canada.
+- Revenue has grown significantly, with a 112% YTD increase compared to the previous year, driven by geographic expansion and strategic product performance.
+- The USA leads in revenue, but Mexico’s rapid growth within one year highlights its potential to rival the USA in the future.
+- Hermanos is the top revenue-generating brand, contributing 3.21% of total sales, reflecting strong consumer demand.
+- Plato stands out with the highest profit margin at 63.6%, despite a lower revenue base of $29,114, showcasing excellent operational efficiency.
+
+ 
+#### 3. Product Detail (DAX + Visual Report)
+- What is the overall trend in customer growth?
+- How has customer behavior changed over time?
+- What patterns in customer demographics indicate opportunities for growth?
+
+Below are the DAX measures.
+```DAX
+Total Customers = DISTINCTCOUNT(Orders[customer_id])
+Average Revenue per Customer = DIVIDE([Total Revenue],[Total Customers],0)
+New Customers = [Total Customers] - [Retained Customers]
+Retained Customers = CALCULATE(COUNTROWS(INTERSECT(VALUES(Orders[customer_id]), CALCULATETABLE(VALUES(Orders[customer_id]),DATEADD(Calendar[date], -1, MONTH)))))
+Retained Customers (%) = DIVIDE([Retained Customers], [Total Customers], 0) 
+```
+
+Below are the visual report for customer detail.
+![image](https://github.com/user-attachments/assets/16c152cb-9d56-4e92-b41e-bea246209412)
 
 
-
+##### Results:
+- Maven Market has had a total of 8,842 customers over the past two years, with most of them (8,060) in 1998. This shows strong customer growth, especially in that year.
+- Maven Market has a high 98.8% retention rate, meaning most customers keep coming back. This shows that customers are happy and loyal to the brand.
+- Bronze membership brings in the most revenue, especially from lower and middle-income customers. These customers find the benefits of the bronze membership, which are likely more affordable, better than having no membership at all (the "normal" status).
 
 
 
