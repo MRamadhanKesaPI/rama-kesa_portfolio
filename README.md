@@ -961,7 +961,6 @@ Previous Year YTD Revenue = CALCULATE([Total Revenue], DATEADD('Calendar'[date],
 ```
 
 Below are the visual report for sales topline performance.
-
 ![image](https://github.com/user-attachments/assets/f29204cd-9bf7-4133-b8c8-add225b21b59)
 
 
@@ -972,8 +971,55 @@ Below are the visual report for sales topline performance.
 - Hermanos is the top revenue-generating brand, contributing 3.21% of total sales, reflecting strong consumer demand.
 - Plato stands out with the highest profit margin at 63.6%, despite a lower revenue base of $29,114, showcasing excellent operational efficiency.
 
+
  
 #### 3. Product Detail (DAX + Visual Report)
+- Which products have the best profit margins and still meet their sales targets?
+- Are there any hidden opportunities with products that have high profit margins but lower sales?
+- How can Maven Market improve 
+
+Below are the DAX measures.
+```DAX
+Previous Month Sold = CALCULATE([Total Sold], DATEADD('Calendar'[date], -1, MONTH))
+
+10 % Sold Target = [Previous Month Sold] * 1.1
+
+Sold Target Gap = [Total Sold] - [10 % Sold Target]
+
+Previous Month Revenue = CALCULATE([Total Revenue], DATEADD('Calendar'[date], -1, MONTH)) 
+
+10 % Revenue Target = [Previous Month Revenue] * 1.1
+
+Revenue Target Gap = [Total Revenue] - [10 % Revenue Target]
+
+Previous Month Profit = CALCULATE([Total Profit], DATEADD('Calendar'[date], -1, MONTH))
+
+10 % Profit Target = [Previous Month Profit] * 1.1
+
+Profit Target Gap = [Total Profit] - [10 % Profit Target]
+
+Product Metric Selections = {
+			     ("Sold", NAMEOF('Measures Table'[Total Sold]), 0),
+    			     ("Revenue", NAMEOF('Measures Table'[Total Revenue]), 1),
+                             ("Profit", NAMEOF('Measures Table'[Total Profit]), 2),
+                             ("Returns", NAMEOF('Measures Table'[Total Returns]), 3)
+                             }
+```
+
+Below are the visual report for product detail.
+![image](https://github.com/user-attachments/assets/a670c9ec-d03b-4b87-89d9-d817fa3ad0a2)
+
+![image](https://github.com/user-attachments/assets/d73dbe2f-9f47-4fcc-83ad-04a66f5f8f2b)
+
+
+
+##### Results:
+- Best Choice balances strong profit margins and sales targets, with $42,738 in revenue and a 60.6% profit margin. It shows a steady upward sales trend, making it a strong performer with high sales and proportional profits.
+- Plato and BBB Best have high profit margins (63.6% and 62.1%, respectively), but lower sales around $30K. However, while BBB Best shows a better sales trend, Plato missed its 10% target last month. Adjusting the price slightly for both products could help attract more buyers
+
+
+
+#### 4. Customer Detail (DAX + Visual Report)
 - What is the overall trend in customer growth?
 - How has customer behavior changed over time?
 - What patterns in customer demographics indicate opportunities for growth?
