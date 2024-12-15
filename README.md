@@ -1065,7 +1065,7 @@ Below are the visual report for operational efficiency .
 
 
 ##### Results:
-- USA stores achieve higher revenue per SQFT ($3.24) with lower order frequency (28), indicating fewer but higher-value purchases. In contrast, Mexico has a high order frequency (66) but lower revenue per SQFT ($1.74), suggesting frequent but smaller transactions. The opportunity lies in boosting order frequency in the USA and Canada while increasing order values in Mexico to balance both performance metrics.
+- USA stores achieve high revenue per SQFT ($3.24) with a low order frequency (28), indicating fewer but higher-value purchases. In contrast, Mexico has a higher order frequency (66) but lower revenue per SQFT ($1.74), suggesting frequent but smaller transactions. The opportunity lies in boosting order frequency in the USA and Canada while increasing order values in Mexico to balance both performance metrics.
 - We focus on USA stores as they have been running for two years. Stores like Store 14, Store 2, and Store 22 consistently underperform, earning under $0.50 revenue per square foot, highlighting the need for further evaluation.
 
 
