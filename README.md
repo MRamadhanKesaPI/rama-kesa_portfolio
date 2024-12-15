@@ -1027,9 +1027,13 @@ Below are the visual report for product detail.
 Below are the DAX measures.
 ```DAX
 Total Customers = DISTINCTCOUNT(Orders[customer_id])
+
 Average Revenue per Customer = DIVIDE([Total Revenue],[Total Customers],0)
+
 New Customers = [Total Customers] - [Retained Customers]
+
 Retained Customers = CALCULATE(COUNTROWS(INTERSECT(VALUES(Orders[customer_id]), CALCULATETABLE(VALUES(Orders[customer_id]),DATEADD(Calendar[date], -1, MONTH)))))
+
 Retained Customers (%) = DIVIDE([Retained Customers], [Total Customers], 0) 
 ```
 
@@ -1044,16 +1048,25 @@ Below are the visual report for customer detail.
 
 
 
+#### 5. Operational Efficiency (DAX + Visual Report)
+- How does store performance vary across different country?
+- Are there specific stores that consistently underperform over time?
+
+Below are the DAX measures.
+```DAX
+Revenue Per SQFT = [Total Revenue] / SUM(Stores[total_sqft])
+
+Order Frequency Per Customer = DIVIDE([Total Orders], [Total Customers], 0)
+```
+
+Below are the visual report for operational efficiency .
+![image](https://github.com/user-attachments/assets/77893aa1-e7e5-4e81-a57b-9fd4bae45779)
 
 
 
-
-
-
-
-
-
-
+##### Results:
+- USA stores achieve higher revenue per SQFT ($3.24) with lower order frequency (28), indicating fewer but higher-value purchases. In contrast, Mexico has a high order frequency (66) but lower revenue per SQFT ($1.74), suggesting frequent but smaller transactions. The opportunity lies in boosting order frequency in the USA and Canada while increasing order values in Mexico to balance both performance metrics.
+- We focus on USA stores as they have been running for two years. Stores like Store 14, Store 2, and Store 22 consistently underperform, earning under $0.50 revenue per square foot, highlighting the need for further evaluation.
 
 
 
